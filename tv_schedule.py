@@ -10,7 +10,7 @@ SPORTS = [
     ("basketball",  "nba"),
     ("baseball",    "mlb"),
     ("hockey",      "nhl"),
-    ("basketball",  "mens-college-basketball"),
+    ("basketball",  "mens-college-basketball?groups=50&limit=50"),
     ("football",    "college-football"),
 ]
 
