@@ -1,0 +1,28 @@
+name: Daily Bar TV Schedule
+
+on:
+  schedule:
+    - cron: '0 12 * * *'   # Runs at 7am Central Time (noon UTC)
+  workflow_dispatch:         # Also lets you run it manually anytime
+
+jobs:
+  send-schedule:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run scheduler
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+        run: python tv_schedule.py
