@@ -183,6 +183,7 @@ def send_email(summary: str, pdf_path: str):
     msg = MIMEMultipart()
     msg["Subject"] = f"📺 TV Schedule for {today_str}"
     msg["From"] = os.environ["GMAIL_ADDRESS"]
+    recipients = os.environ["RECIPIENT_EMAIL"].split(",")
     msg["To"] = os.environ["RECIPIENT_EMAIL"]
 
     # Email body is just the summary
@@ -202,7 +203,7 @@ def send_email(summary: str, pdf_path: str):
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
         server.login(os.environ["GMAIL_ADDRESS"], os.environ["GMAIL_APP_PASSWORD"])
-        server.send_message(msg)
+        server.sendmail(os.environ["GMAIL_ADDRESS"], recipients, msg.as_string())
     print("Email sent successfully!")
 
 if __name__ == "__main__":
