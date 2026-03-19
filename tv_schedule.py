@@ -37,8 +37,7 @@ def build_schedule(games: str) -> str:
     message = client.messages.create(
         model="claude-opus-4-6",
         max_tokens=1500,
-        messages=[{"role": "user", "content": f"""
-Today is {today}. Here are all sports games on TV today (times are UTC):
+        messages=[{"role": "user", "content": f"""Today is {today}. Here are all sports games on TV today (times are UTC):
 
 {games}
 
@@ -49,7 +48,7 @@ Guidelines:
 - Prioritize based on the time of year and what is culturally significant that day.
   General hierarchy: NFL > NBA Finals/Playoffs > MLB Playoffs/World Series > NHL Playoffs > NCAA March Madness > NBA regular season > MLB regular season > NHL regular season > Other
 - HOWEVER, use common sense seasonal logic:
-  If it is March, NCAA Men's Basketball Tournament games (March Madness) should be treated as must-show events. March Madness is college BASKETBALL, not football. College football is out of season in March — ignore any college football data as it will be future schedules.
+  If it is March, NCAA Men's Basketball Tournament games (March Madness) should be treated as must-show events. March Madness is college BASKETBALL, not football. College football is out of season in March - ignore any college football data as it will be future schedules.
   If it is October, MLB playoff/World Series games outrank everything except NFL.
   If it is June, NBA Finals outrank everything except NFL.
   If there are only a few tournament/playoff games on, dedicate TVs to them before filling with regular season games.
@@ -60,7 +59,7 @@ Guidelines:
 - When a game ends, suggest what to switch to
 
 Format the output as a simple, easy-to-read briefing for bar staff.
-Use plain text only — no markdown, no asterisks, no hashtags, no table formatting.
+Use plain text only - no markdown, no asterisks, no hashtags, no table formatting.
 
 Structure it like this example:
 
@@ -73,10 +72,10 @@ TV 4 | ...
 AFTERNOON (3pm - 6pm)
 TV 1 | ...
 
-PRIMETIME (6pm - close) ⭐
+PRIMETIME (6pm - close) 
 TV 1 | ...
 
-At the end include a 3-5 sentence plain English summary of the day —
+At the end include a 3-5 sentence plain English summary of the day -
 what the big games are, what to prioritize, and any switching recommendations.
 """}]
     )
