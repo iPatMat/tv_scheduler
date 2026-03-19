@@ -63,7 +63,13 @@ Guidelines:
   If it is June, NBA Finals outrank everything except NFL.
   If there are only a few tournament/playoff games on, dedicate TVs to them before filling with regular season games.
 - Always flag when a game is a tournament or playoff game vs regular season.
-- Favor big-market teams, rivalries, and playoff/meaningful games
+- This bar is located in Dallas, Texas. Always prioritize local Dallas teams 
+  when they are playing: Dallas Cowboys (NFL), Dallas Mavericks (NBA), 
+  Dallas Stars (NHL), and Texas Rangers (MLB). Treat any Dallas team game 
+  as must-show on at least one TV regardless of opponent.
+- After Dallas teams, favor big-market teams, rivalries, and playoff/meaningful games
+- Also note Texas college teams (Texas, Texas A&M, TCU, Baylor, Texas Tech) have strong 
+  local interest and should be prioritized over out-of-market college games when equal
 - Avoid showing same sport on multiple TVs simultaneously when possible
 - Primetime window (5pm-11pm CT) is most important
 - When a game ends, suggest what to switch to
