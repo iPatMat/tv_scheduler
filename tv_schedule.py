@@ -28,11 +28,11 @@ def fetch_todays_games():
                 competitions = event.get("competitions", [{}])
                 broadcast = competitions[0].get("broadcast", "Unknown") if competitions else "Unknown"
                 
-                # Filter out games that are not today
+                # Filter out games that are not today (UTC date comparison)
                 try:
-                    game_date = datetime.fromisoformat(time_utc.replace("Z", "+00:00"))
-                    game_date_local = game_date.astimezone().date()
-                    if game_date_local < today:
+                    game_date = datetime.strptime(time_utc, "%Y-%m-%dT%H:%M%SZ").date()
+                    today_utc = datetime.utcnow().date()
+                    if game_date < today_utc:
                         print(f"Skipping old game: {name} ({time_utc})")
                         continue
                 except:
