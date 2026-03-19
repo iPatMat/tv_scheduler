@@ -16,6 +16,8 @@ SPORTS = [
 
 def fetch_todays_games():
     all_games = []
+    today = date.today()
+    
     for sport, league in SPORTS:
         try:
             url = f"http://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/scoreboard"
@@ -25,6 +27,17 @@ def fetch_todays_games():
                 time_utc = event.get("date", "")
                 competitions = event.get("competitions", [{}])
                 broadcast = competitions[0].get("broadcast", "Unknown") if competitions else "Unknown"
+                
+                # Filter out games that are not today
+                try:
+                    game_date = datetime.fromisoformat(time_utc.replace("Z", "+00:00"))
+                    game_date_local = game_date.astimezone().date()
+                    if game_date_local < today:
+                        print(f"Skipping old game: {name} ({time_utc})")
+                        continue
+                except:
+                    pass
+                
                 all_games.append(f"{name} | {time_utc} | {broadcast}")
         except Exception as e:
             print(f"Error fetching {league}: {e}")
