@@ -220,10 +220,3 @@ if __name__ == "__main__":
     print("Sending email...")
     send_email(summary, pdf_path)
     print("Done!")
-```
-
-And make sure your `requirements.txt` is updated to:
-```
-anthropic
-requests
-reportlab
