@@ -11,7 +11,7 @@ SPORTS = [
     ("baseball",    "mlb"),
     ("hockey",      "nhl"),
     ("basketball",  "mens-college-basketball?groups=50&limit=50"),
-    ("football",    "college-football"),
+    #("football",    "college-football"),
 ]
 
 def fetch_todays_games():
@@ -49,7 +49,7 @@ Guidelines:
 - Prioritize based on the time of year and what is culturally significant that day.
   General hierarchy: NFL > NBA Finals/Playoffs > MLB Playoffs/World Series > NHL Playoffs > NCAA March Madness > NBA regular season > MLB regular season > NHL regular season > Other
 - HOWEVER, use common sense seasonal logic:
-  If it is March, NCAA Tournament games (March Madness) should be treated as must-show events, even over MLB and NHL regular season games.
+  If it is March, NCAA Men's Basketball Tournament games (March Madness) should be treated as must-show events. March Madness is college BASKETBALL, not football. College football is out of season in March — ignore any college football data as it will be future schedules.
   If it is October, MLB playoff/World Series games outrank everything except NFL.
   If it is June, NBA Finals outrank everything except NFL.
   If there are only a few tournament/playoff games on, dedicate TVs to them before filling with regular season games.
