@@ -46,7 +46,14 @@ Create an optimized TV schedule for a sports bar with 4 TVs.
 
 Guidelines:
 - Convert times to Central Time (UTC-5 or UTC-6 depending on DST)
-- Prioritize: NFL > NBA playoffs > MLB > NHL > College sports > Other
+- Prioritize based on the time of year and what is culturally significant that day.
+  General hierarchy: NFL > NBA Finals/Playoffs > MLB Playoffs/World Series > NHL Playoffs > NCAA March Madness > NBA regular season > MLB regular season > NHL regular season > Other
+- HOWEVER, use common sense seasonal logic:
+  If it is March, NCAA Tournament games (March Madness) should be treated as must-show events, even over MLB and NHL regular season games.
+  If it is October, MLB playoff/World Series games outrank everything except NFL.
+  If it is June, NBA Finals outrank everything except NFL.
+  If there are only a few tournament/playoff games on, dedicate TVs to them before filling with regular season games.
+- Always flag when a game is a tournament or playoff game vs regular season.
 - Favor big-market teams, rivalries, and playoff/meaningful games
 - Avoid showing same sport on multiple TVs simultaneously when possible
 - Primetime window (5pm-11pm CT) is most important
