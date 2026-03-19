@@ -52,10 +52,25 @@ Guidelines:
 - Primetime window (5pm-11pm CT) is most important
 - When a game ends, suggest what to switch to
 
-Format as a clean schedule like:
-TV 1: [Game name] [Time CT] [Network]
-TV 2: [Game name] [Time CT] [Network]
-...then show time blocks for the full day.
+Format the output as a simple, easy-to-read briefing for bar staff.
+Use plain text only — no markdown, no asterisks, no hashtags, no table formatting.
+
+Structure it like this example:
+
+MORNING (11am - 3pm)
+TV 1 | Cubs vs Cardinals | 12:05pm | MLB.TV
+TV 2 | Lakers vs Warriors | 1:00pm | ESPN
+TV 3 | ...
+TV 4 | ...
+
+AFTERNOON (3pm - 6pm)
+TV 1 | ...
+
+PRIMETIME (6pm - close) ⭐
+TV 1 | ...
+
+At the end include a 3-5 sentence plain English summary of the day —
+what the big games are, what to prioritize, and any switching recommendations.
 """}]
     )
     return message.content[0].text
