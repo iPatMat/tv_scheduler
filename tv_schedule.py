@@ -16,33 +16,22 @@ SPORTS = [
 
 def fetch_todays_games():
     all_games = []
-    today = date.today()
+    today_str = date.today().strftime("%Y%m%d")  # formats as 20260319
     
     for sport, league in SPORTS:
         try:
-            url = f"http://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/scoreboard"
+            url = f"http://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/scoreboard?dates={today_str}"
             data = requests.get(url, timeout=10).json()
             for event in data.get("events", []):
                 name = event.get("name", "Unknown")
                 time_utc = event.get("date", "")
                 competitions = event.get("competitions", [{}])
                 broadcast = competitions[0].get("broadcast", "Unknown") if competitions else "Unknown"
-                
-                # Filter out games that are not today (UTC date comparison)
-                try:
-                    game_date = datetime.strptime(time_utc, "%Y-%m-%dT%H:%M%SZ").date()
-                    today_utc = datetime.utcnow().date()
-                    if game_date < today_utc:
-                        print(f"Skipping old game: {name} ({time_utc})")
-                        continue
-                except:
-                    pass
-                
                 all_games.append(f"{name} | {time_utc} | {broadcast}")
         except Exception as e:
             print(f"Error fetching {league}: {e}")
     return "\n".join(all_games) if all_games else "No games found today."
-
+    
 def build_schedule(games: str) -> str:
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
     today = date.today().strftime("%A, %B %d, %Y")
