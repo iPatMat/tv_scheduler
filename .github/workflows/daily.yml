@@ -2,7 +2,7 @@ name: Daily Bar TV Schedule
 
 on:
   schedule:
-    - cron: '0 12 * * *'   # Runs at 7am Central Time (noon UTC)
+    - cron: '0 11 * * *'   # Runs at 7am Central Time (noon UTC)
   workflow_dispatch:         # Also lets you run it manually anytime
 
 jobs:
