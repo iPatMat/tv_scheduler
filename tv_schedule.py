@@ -74,6 +74,12 @@ Guidelines:
 - Avoid showing same sport on multiple TVs simultaneously when possible
 - Primetime window (5pm-11pm CT) is most important
 - When a game ends, suggest what to switch to
+- For each game, include the DirecTV channel number in parentheses after 
+  the network name. This bar uses DirecTV in Dallas, Texas.
+  Common mappings: CBS = 4, NBC = 5, ABC = 7, ESPN = 206, ESPN2 = 209, 
+  FS1 = 219, FS2 = 618, TNT = 245, TBS = 247, truTV = 246, 
+  NHL Network = 215, NBA TV = 216, MLB Network = 213, 
+  NFL Network = 212, CBS Sports Network = 221
 
 Format your response EXACTLY like this with both sections clearly labeled:
 
