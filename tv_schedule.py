@@ -52,7 +52,7 @@ def build_schedule(games: str) -> tuple:
 
 {games}
 
-Create an optimized TV schedule for a sports bar with 4 TVs.
+Create an optimized TV schedule for a sports bar with 6 TVs.
 
 Guidelines:
 - Convert times to Central Time (UTC-5 or UTC-6 depending on DST)
