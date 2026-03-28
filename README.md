@@ -67,7 +67,7 @@ SPORTS = [
     ("baseball",    "mlb"),
     ("hockey",      "nhl"),
     ("basketball",  "mens-college-basketball"),
-    # ("football",  "college-football"),  # uncomment in September
+    ("football",  "college-football"), 
 ]
 ```
 
