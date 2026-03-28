@@ -76,4 +76,4 @@ SPORTS = [
 - The ESPN API is an unofficial public endpoint — no signup or API key required
 - Gmail requires an App Password (not your regular password) — enable 2-Step Verification first
 - Anthropic API credits cost roughly $0.03–0.05 per day at this usage level
-- The script runs at 9am CT to ensure ESPN has fully updated to the current day's schedule
+- The script runs at 7am CT to ensure ESPN has fully updated to the current day's schedule
