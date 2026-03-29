@@ -1,7 +1,56 @@
 import json
+import re
 import sys
 from datetime import date
 from html import escape
+
+SECTION_RE = re.compile(r'^([A-Z]+(?:\s+[A-Z]+)*)\s*\(([^)]+)\)\s*$')
+TV_LINE_RE = re.compile(r'^TV\s*(\d+)\s*\|(.+)$', re.IGNORECASE)
+
+def parse_schedule(schedule_text: str) -> list:
+    """Parse plain-text schedule into a list of time block dicts."""
+    blocks = []
+    current_block = None
+
+    for raw_line in schedule_text.splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+
+        section_match = SECTION_RE.match(line)
+        if section_match:
+            if current_block:
+                blocks.append(current_block)
+            current_block = {
+                "label": section_match.group(1),
+                "time_range": section_match.group(2).strip(),
+                "assignments": [],
+                "switching_notes": [],
+            }
+            continue
+
+        if current_block is None:
+            continue
+
+        tv_match = TV_LINE_RE.match(line)
+        if tv_match:
+            tv_num = int(tv_match.group(1))
+            parts = [p.strip() for p in tv_match.group(2).split("|")]
+            current_block["assignments"].append({
+                "tv": tv_num,
+                "game": parts[0] if len(parts) > 0 else "",
+                "time": parts[1] if len(parts) > 1 else "",
+                "network": parts[2] if len(parts) > 2 else "",
+                "note": parts[3] if len(parts) > 3 else "",
+            })
+        else:
+            # Anything else in a block is treated as a switching note
+            current_block["switching_notes"].append(line)
+
+    if current_block:
+        blocks.append(current_block)
+
+    return blocks
 
 def generate_html(schedule_path="schedule.json", output_path="index.html"):
     with open(schedule_path) as f:
@@ -9,41 +58,48 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
 
     date_str = escape(data.get("date", date.today().strftime("%A, %B %d, %Y")))
     summary = escape(data.get("summary", ""))
-    time_blocks = data.get("time_blocks", [])
+    schedule_text = data.get("schedule", "")
+    time_blocks = parse_schedule(schedule_text)
 
     blocks_html = ""
     for block in time_blocks:
-        label = escape(block.get("label", ""))
-        time_range = escape(block.get("time_range", ""))
-        assignments = block.get("assignments", [])
-        switching_notes = block.get("switching_notes", "").strip()
+        label = escape(block["label"])
+        time_range = escape(block["time_range"])
 
         rows_html = ""
-        for a in assignments:
-            tv = int(a.get("tv", 0))
-            game = escape(str(a.get("game", "")))
-            time = escape(str(a.get("time", "")))
-            network = escape(str(a.get("network", "")))
-            league = escape(str(a.get("league", "")))
-            is_playoff = a.get("is_playoff", False)
+        for a in block["assignments"]:
+            game = escape(a["game"])
+            time = escape(a["time"])
+            network = escape(a["network"])
+            note = escape(a["note"])
 
+            is_playoff = any(
+                kw in a["game"].upper()
+                for kw in ("PLAYOFF", "TOURNAMENT", "FINALS", "MARCH MADNESS",
+                           "WORLD SERIES", "SUPER BOWL", "CHAMPIONSHIP")
+            )
             playoff_badge = (
                 '<span class="playoff-badge">Playoff / Tournament</span>'
                 if is_playoff else ""
             )
 
+            note_html = f'<div class="note">{note}</div>' if note else ""
+
             rows_html += f"""
       <div class="row">
-        <div class="tv-badge">TV {tv}</div>
+        <div class="tv-badge">TV {a['tv']}</div>
         <div class="game-info">
           <div class="game">{game}{playoff_badge}</div>
-          <div class="meta">{time}&nbsp;&nbsp;·&nbsp;&nbsp;{network}&nbsp;&nbsp;·&nbsp;&nbsp;{league}</div>
+          <div class="meta">{time}&nbsp;&nbsp;·&nbsp;&nbsp;{network}</div>
+          {note_html}
         </div>
       </div>"""
 
         switching_html = ""
-        if switching_notes:
-            switching_html = f'<div class="switching">&#x21B3; {escape(switching_notes)}</div>'
+        notes = [n for n in block["switching_notes"] if n]
+        if notes:
+            notes_escaped = "<br>".join(escape(n) for n in notes)
+            switching_html = f'<div class="switching">&#x21B3; {notes_escaped}</div>'
 
         blocks_html += f"""
   <div class="block">
@@ -188,6 +244,12 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
       color: #666;
       font-size: 0.8rem;
       margin-top: 3px;
+    }}
+    .game-info .note {{
+      color: #888;
+      font-size: 0.78rem;
+      margin-top: 3px;
+      font-style: italic;
     }}
 
     .playoff-badge {{
