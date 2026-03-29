@@ -9,16 +9,17 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0f0f0f;
+      background: #0a0f1e;
       color: #e0e0e0;
       min-height: 100vh;
+      border-top: 3px solid #378ADD;
     }
 
     header {
-      background: #1a1a2e;
+      background: #0a0f1e;
       padding: 1.5rem 1rem 1.25rem;
       text-align: center;
-      border-bottom: 3px solid #e94560;
+      border-bottom: 1px solid rgba(55, 138, 221, 0.2);
     }
     header h1 {
       font-size: 1.6rem;
@@ -28,32 +29,54 @@
       font-weight: 800;
     }
     header .date {
-      color: #9090a8;
+      color: #8ba3c7;
       margin-top: 0.3rem;
       font-size: 0.9rem;
       letter-spacing: 1px;
     }
 
     .summary {
-      background: #1e1e2e;
-      border-left: 4px solid #e94560;
+      background: #111827;
+      border-left: 4px solid #378ADD;
       border-radius: 0 8px 8px 0;
       padding: 1rem 1.25rem;
       margin: 1rem;
       font-size: 0.95rem;
       line-height: 1.65;
-      color: #c0c0d0;
+      color: #e8eef8;
     }
+
+    .legend {
+      display: flex;
+      gap: 1.25rem;
+      padding: 0 1rem 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      color: #8ba3c7;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .priority-dot { background: #378ADD; }
+    .local-dot    { background: #1D9E75; }
 
     .block {
       margin: 0.75rem 1rem;
     }
 
     details {
-      background: #1e1e2e;
+      background: #ffffff;
       border-radius: 10px;
       overflow: hidden;
-      border: 1px solid #2a2a40;
+      border: 1px solid rgba(255,255,255,0.08);
     }
 
     summary {
@@ -63,7 +86,7 @@
       font-size: 0.95rem;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      color: #e94560;
+      color: #378ADD;
       list-style: none;
       display: flex;
       align-items: center;
@@ -75,7 +98,7 @@
       content: "\25BE";
       font-size: 1.1rem;
       transition: transform 0.2s ease;
-      color: #555;
+      color: #378ADD;
     }
     details[open] summary::after {
       transform: rotate(-180deg);
@@ -84,7 +107,7 @@
     .time-range {
       font-weight: 400;
       font-size: 0.78rem;
-      color: #666;
+      color: #6b8ab0;
       letter-spacing: 0.5px;
       margin-left: 0.5rem;
       text-transform: none;
@@ -99,16 +122,23 @@
       grid-template-columns: 52px 1fr;
       gap: 0.75rem;
       padding: 0.65rem 1rem;
-      border-top: 1px solid #252538;
+      border-top: 1px solid #ebebf0;
       align-items: start;
+      border-left: 3px solid transparent;
     }
     .row:hover {
-      background: #23233a;
+      background: #f5f8ff;
+    }
+    .row.priority {
+      border-left-color: #378ADD;
+    }
+    .row.local {
+      border-left-color: #1D9E75;
     }
 
     .tv-badge {
-      background: #e94560;
-      color: #fff;
+      background: #E6F1FB;
+      color: #0C447C;
       font-weight: 700;
       font-size: 0.75rem;
       padding: 0.2rem 0.4rem;
@@ -122,16 +152,16 @@
     .game-info .game {
       font-weight: 600;
       font-size: 0.95rem;
-      color: #e8e8f0;
+      color: #0f1923;
       line-height: 1.3;
     }
     .game-info .meta {
-      color: #666;
+      color: #6b7280;
       font-size: 0.8rem;
       margin-top: 3px;
     }
     .game-info .note {
-      color: #888;
+      color: #9ca3af;
       font-size: 0.78rem;
       margin-top: 3px;
       font-style: italic;
@@ -155,23 +185,23 @@
 
     .switching {
       padding: 0.6rem 1rem;
-      color: #666;
+      color: #6b7280;
       font-size: 0.82rem;
       font-style: italic;
-      border-top: 1px solid #252538;
-      background: #191926;
+      border-top: 1px solid #ebebf0;
+      background: #f8faff;
     }
 
     footer {
       text-align: center;
       padding: 2.5rem 1rem 2rem;
-      color: #444;
+      color: #8ba3c7;
       font-size: 0.78rem;
     }
 
     @media (min-width: 640px) {
       header h1 { font-size: 2rem; }
-      .summary, .block { max-width: 700px; margin-left: auto; margin-right: auto; }
+      .summary, .legend, .block { max-width: 700px; margin-left: auto; margin-right: auto; }
     }
   </style>
 </head>
@@ -182,7 +212,12 @@
   <div class="date">Sunday, March 29, 2026</div>
 </header>
 
-<div class="summary">Today is a massive day for the bar -- it&#x27;s NCAA March Madness Elite Eight Sunday, which means those two CBS games (Tennessee vs Michigan at 1:15pm CT and UConn vs Duke at 4:05pm CT) are the absolute top priority and should be front and center on the biggest screens all afternoon and evening. The Dallas Stars play at Philadelphia at 6:00pm CT, which is a must-show for our local crowd. The Texas Rangers open their season at Philadelphia at 12:35pm CT, another must-show for Dallas fans. The rest of the TVs can fill with Opening Day MLB action in the afternoon and transition to NBA and NHL in the evening. Key switching moments: around 6:00pm CT when several NBA and NHL games tip off, and at 8:30pm CT when Warriors-Nuggets starts on NBC/Peacock.</div>
+<div class="summary">Today is Elite Eight Sunday for March Madness — Tennessee vs Michigan (1:15pm CT on CBS) and UConn vs Duke (4:05pm CT on CBS) are the headliners and should be the centerpiece of every TV plan. These are must-show, volume-up events. The Dallas Stars play at Philadelphia at 6:00pm CT on ESPN+, which is a must-show for our local crowd. Texas Rangers open their season at Philadelphia at 12:35pm CT, another local must-show. The evening fills out nicely with NBA action including Knicks-Thunder on NBC and Warriors-Nuggets late on NBC. Staff should know the big CBS switch happens around 4:05pm when the second Elite Eight game tips, and the 6:00pm hour is the key transition from college hoops to NHL/NBA.</div>
+
+<div class="legend">
+  <div class="legend-item"><span class="dot priority-dot"></span>Playoff / Tournament</div>
+  <div class="legend-item"><span class="dot local-dot"></span>Dallas / Local Team</div>
+</div>
 
 
   <div class="block">
@@ -192,55 +227,55 @@
         <span class="time-range">12:00pm - 3:00pm CT</span>
       </summary>
       <div class="assignments">
-      <div class="row">
+      <div class="row priority">
         <div class="tv-badge">TV 1</div>
         <div class="game-info">
-          <div class="game">Florida Panthers at New York Rangers</div>
-          <div class="meta">12:00pm&nbsp;&nbsp;·&nbsp;&nbsp;NHL Network (215)</div>
-          <div class="note">NHL Regular Season</div>
+          <div class="game">Tennessee vs Michigan (Elite Eight - March Madness)<span class="playoff-badge">Playoff / Tournament</span></div>
+          <div class="meta">1:15pm CT&nbsp;&nbsp;·&nbsp;&nbsp;CBS (Ch 4)</div>
+          
         </div>
       </div>
-      <div class="row">
+      <div class="row local">
         <div class="tv-badge">TV 2</div>
         <div class="game-info">
-          <div class="game">Texas Rangers at Philadelphia Phillies</div>
-          <div class="meta">12:35pm&nbsp;&nbsp;·&nbsp;&nbsp;MLB.TV / MLB Network (213)</div>
-          <div class="note">MLB Opening Day - LOCAL TEAM MUST-SHOW</div>
+          <div class="game">Texas Rangers at Philadelphia Phillies (MLB Regular Season - Opening Weekend, LOCAL TEAM)</div>
+          <div class="meta">12:35pm CT&nbsp;&nbsp;·&nbsp;&nbsp;MLB.TV</div>
+          
         </div>
       </div>
       <div class="row">
         <div class="tv-badge">TV 3</div>
         <div class="game-info">
-          <div class="game">Tennessee Volunteers vs Michigan Wolverines</div>
-          <div class="meta">1:15pm&nbsp;&nbsp;·&nbsp;&nbsp;CBS (4)</div>
-          <div class="note">NCAA MARCH MADNESS ELITE EIGHT - TOP PRIORITY, BIG SCREEN</div>
+          <div class="game">Kansas City Royals at Atlanta Braves (MLB Regular Season - Opening Weekend)</div>
+          <div class="meta">12:35pm CT&nbsp;&nbsp;·&nbsp;&nbsp;MLB Network (Ch 213)</div>
+          
         </div>
       </div>
-      <div class="row">
+      <div class="row local">
         <div class="tv-badge">TV 4</div>
         <div class="game-info">
-          <div class="game">Kansas City Royals at Atlanta Braves</div>
-          <div class="meta">12:35pm&nbsp;&nbsp;·&nbsp;&nbsp;MLB Network (213) / MLB.TV</div>
-          <div class="note">MLB Opening Day</div>
+          <div class="game">Florida Panthers at New York Rangers (NHL Regular Season)</div>
+          <div class="meta">12:00pm CT&nbsp;&nbsp;·&nbsp;&nbsp;NHL Network (Ch 215)</div>
+          
         </div>
       </div>
       <div class="row">
         <div class="tv-badge">TV 5</div>
         <div class="game-info">
-          <div class="game">Boston Red Sox at Cincinnati Reds</div>
-          <div class="meta">12:40pm&nbsp;&nbsp;·&nbsp;&nbsp;ESPN (206)</div>
-          <div class="note">MLB Opening Day</div>
+          <div class="game">Boston Red Sox at Cincinnati Reds (MLB Regular Season - Opening Weekend)</div>
+          <div class="meta">12:40pm CT&nbsp;&nbsp;·&nbsp;&nbsp;ESPN Unlmtd/MLB.TV</div>
+          
         </div>
       </div>
       <div class="row">
         <div class="tv-badge">TV 6</div>
         <div class="game-info">
-          <div class="game">Los Angeles Angels at Houston Astros</div>
-          <div class="meta">1:10pm&nbsp;&nbsp;·&nbsp;&nbsp;MLB.TV</div>
-          <div class="note">MLB Opening Day (Texas regional interest)</div>
+          <div class="game">Pittsburgh Pirates at New York Mets (MLB Regular Season - Opening Weekend)</div>
+          <div class="meta">12:40pm CT&nbsp;&nbsp;·&nbsp;&nbsp;MLB.TV</div>
+          
         </div>
       </div>
-      </div><div class="switching">&#x21B3; Notes: Panthers-Rangers ends around 2:30pm. TV 1 switches to Washington Nationals at Chicago Cubs at 1:20pm on MLB.TV if Panthers game wraps early, or hold for March Madness overflow. TV 4 and TV 5 MLB games end around 3:30-4:00pm. All TVs not showing March Madness can rotate among Opening Day games. The big screen should stay locked on CBS for March Madness all afternoon.</div>
+      </div><div class="switching">&#x21B3; NOTE: This is the marquee game. Volume UP. Does not start until 1:15 so fill with pre-game or put Rangers on until tip.<br>Keep on through completion. Rangers are must-show for Dallas crowd.<br>National broadcast game, good background. Switch to Elite Eight pregame on CBS if needed.<br>Good early filler with a strong matchup. Game should end around 2:30pm.<br>Background game. Switch as needed at 2:30pm window.<br>Background filler. Low priority, switch first when needed.<br>SWITCHING NOTE at ~2:30pm: As early MLB games and the Panthers-Rangers NHL game wind down, begin consolidating. Make sure TV 1 stays locked on CBS for the Tennessee-Michigan finish leading into the UConn-Duke tip.</div>
     </details>
   </div>
   <div class="block">
@@ -250,113 +285,113 @@
         <span class="time-range">3:00pm - 6:00pm CT</span>
       </summary>
       <div class="assignments">
-      <div class="row">
+      <div class="row priority">
         <div class="tv-badge">TV 1</div>
         <div class="game-info">
-          <div class="game">LA Clippers at Milwaukee Bucks</div>
-          <div class="meta">2:30pm&nbsp;&nbsp;·&nbsp;&nbsp;NBA TV (216)</div>
-          <div class="note">NBA Regular Season</div>
+          <div class="game">UConn vs Duke (Elite Eight - March Madness)<span class="playoff-badge">Playoff / Tournament</span></div>
+          <div class="meta">4:05pm CT&nbsp;&nbsp;·&nbsp;&nbsp;CBS (Ch 4)</div>
+          
         </div>
       </div>
-      <div class="row">
+      <div class="row local">
         <div class="tv-badge">TV 2</div>
         <div class="game-info">
-          <div class="game">Texas Rangers at Philadelphia Phillies (continued or wrap-up)</div>
-          <div class="meta">MLB.TV / MLB Network (213)&nbsp;&nbsp;·&nbsp;&nbsp;LOCAL TEAM</div>
+          <div class="game">Texas Rangers at Phillies (continued if still playing)</div>
+          <div class="meta">MLB.TV&nbsp;&nbsp;·&nbsp;&nbsp;</div>
           
         </div>
       </div>
       <div class="row">
         <div class="tv-badge">TV 3</div>
         <div class="game-info">
-          <div class="game">UConn Huskies vs Duke Blue Devils</div>
-          <div class="meta">4:05pm&nbsp;&nbsp;·&nbsp;&nbsp;CBS (4)</div>
-          <div class="note">NCAA MARCH MADNESS ELITE EIGHT - TOP PRIORITY, BIG SCREEN</div>
+          <div class="game">LA Clippers at Milwaukee Bucks (NBA Regular Season)</div>
+          <div class="meta">2:30pm CT&nbsp;&nbsp;·&nbsp;&nbsp;NBA TV (Ch 216)</div>
+          
         </div>
       </div>
       <div class="row">
         <div class="tv-badge">TV 4</div>
         <div class="game-info">
-          <div class="game">Cleveland Guardians at Seattle Mariners</div>
-          <div class="meta">Pre-game coverage&nbsp;&nbsp;·&nbsp;&nbsp;Peacock</div>
-          <div class="note">MLB Opening Day (starts 6:20pm)</div>
+          <div class="game">Cleveland Guardians at Seattle Mariners (MLB Regular Season)</div>
+          <div class="meta">If not started yet, show MLB whip-around or keep on any lingering early game.&nbsp;&nbsp;·&nbsp;&nbsp;</div>
+          
         </div>
       </div>
       <div class="row">
         <div class="tv-badge">TV 5</div>
         <div class="game-info">
-          <div class="game">Miami Heat at Indiana Pacers</div>
-          <div class="meta">4:00pm&nbsp;&nbsp;·&nbsp;&nbsp;Check local RSN / League Pass</div>
-          <div class="note">NBA Regular Season</div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="tv-badge">TV 6</div>
-        <div class="game-info">
-          <div class="game">Pittsburgh Pirates at New York Mets or Tampa Bay Rays at St. Louis Cardinals (whichever is still in late innings)</div>
-          <div class="meta">MLB.TV&nbsp;&nbsp;·&nbsp;&nbsp;MLB Opening Day</div>
+          <div class="game">Miami Heat at Indiana Pacers (NBA Regular Season)</div>
+          <div class="meta">4:00pm CT&nbsp;&nbsp;·&nbsp;&nbsp;No national broadcast listed — use league pass or switch to secondary March Madness coverage/studio show if available.</div>
           
         </div>
       </div>
-      </div><div class="switching">&#x21B3; Notes: Tennessee-Michigan game on TV 3 transitions directly into UConn-Duke at 4:05pm CT -- DO NOT CHANGE CBS on the big screen. Clippers-Bucks tips at 2:30pm on NBA TV. As Rangers and other MLB afternoon games wrap up around 3:30-4:30pm, begin transitioning those TVs toward the evening lineup. At 5:00pm CT, start preparing for the big evening block.</div>
+      <div class="row priority">
+        <div class="tv-badge">TV 6</div>
+        <div class="game-info">
+          <div class="game">Keep on CBS studio coverage / March Madness pre-game as a second angle or overflow screen for the Elite Eight if the bar is packed. Otherwise show any remaining MLB game.<span class="playoff-badge">Playoff / Tournament</span></div>
+          <div class="meta">&nbsp;&nbsp;·&nbsp;&nbsp;</div>
+          
+        </div>
+      </div>
+      </div><div class="switching">&#x21B3; This follows Tennessee-Michigan on CBS. Keep TV 1 locked on CBS all afternoon. Volume UP. This is the game of the day.<br>If game is over, switch to LA Clippers at Milwaukee Bucks at 2:30pm CT on NBA TV (Ch 216).<br>Afternoon NBA action. Good bridge game before primetime.<br>NOTE: Guardians-Mariners starts late at 6:20pm CT on Peacock — hold this TV for later.<br>SWITCHING NOTE at ~5:45pm: UConn-Duke should be finishing or in crunch time. Do NOT switch TV 1 until this game is fully over. Begin preparing TVs for the primetime NHL/NBA block.</div>
     </details>
   </div>
   <div class="block">
     <details open>
       <summary>
         PRIMETIME
-        <span class="time-range">6:00pm - Close</span>
+        <span class="time-range">6:00pm - Close CT</span>
       </summary>
       <div class="assignments">
-      <div class="row">
+      <div class="row local">
         <div class="tv-badge">TV 1</div>
         <div class="game-info">
-          <div class="game">Dallas Stars at Philadelphia Flyers</div>
-          <div class="meta">6:00pm&nbsp;&nbsp;·&nbsp;&nbsp;ESPN+ (206 or streaming)</div>
-          <div class="note">NHL Regular Season - LOCAL TEAM MUST-SHOW</div>
+          <div class="game">Dallas Stars at Philadelphia Flyers (NHL Regular Season - LOCAL TEAM)</div>
+          <div class="meta">6:00pm CT&nbsp;&nbsp;·&nbsp;&nbsp;ESPN+ (stream to TV)</div>
+          
         </div>
       </div>
       <div class="row">
         <div class="tv-badge">TV 2</div>
         <div class="game-info">
-          <div class="game">New York Knicks at Oklahoma City Thunder</div>
-          <div class="meta">6:30pm&nbsp;&nbsp;·&nbsp;&nbsp;NBC (5) / Peacock</div>
-          <div class="note">NBA Regular Season (OKC is regional draw for Dallas-area fans)</div>
+          <div class="game">New York Knicks at Oklahoma City Thunder (NBA Regular Season)</div>
+          <div class="meta">6:30pm CT&nbsp;&nbsp;·&nbsp;&nbsp;NBC/Peacock (Ch 5)</div>
+          
         </div>
       </div>
       <div class="row">
         <div class="tv-badge">TV 3</div>
         <div class="game-info">
-          <div class="game">UConn vs Duke (continued/finish) then switch to Golden State Warriors at Denver Nuggets</div>
-          <div class="meta">9:00pm&nbsp;&nbsp;·&nbsp;&nbsp;CBS (4) then NBC (5) / Peacock</div>
-          <div class="note">MARCH MADNESS ELITE EIGHT then NBA Regular Season</div>
+          <div class="game">Chicago Blackhawks at New Jersey Devils (NHL Regular Season)</div>
+          <div class="meta">6:00pm CT&nbsp;&nbsp;·&nbsp;&nbsp;NHL Network (Ch 215)</div>
+          
         </div>
       </div>
       <div class="row">
         <div class="tv-badge">TV 4</div>
         <div class="game-info">
-          <div class="game">Chicago Blackhawks at New Jersey Devils</div>
-          <div class="meta">6:00pm&nbsp;&nbsp;·&nbsp;&nbsp;NHL Network (215)</div>
-          <div class="note">NHL Regular Season</div>
+          <div class="game">Houston Rockets at New Orleans Pelicans (NBA Regular Season)</div>
+          <div class="meta">6:00pm CT&nbsp;&nbsp;·&nbsp;&nbsp;No national broadcast listed — use league pass if available.</div>
+          
         </div>
       </div>
       <div class="row">
         <div class="tv-badge">TV 5</div>
         <div class="game-info">
-          <div class="game">Houston Rockets at New Orleans Pelicans</div>
-          <div class="meta">6:00pm&nbsp;&nbsp;·&nbsp;&nbsp;MLB.TV or League Pass</div>
-          <div class="note">NBA Regular Season (Texas team regional interest)</div>
+          <div class="game">Nashville Predators at Tampa Bay Lightning (NHL Regular Season)</div>
+          <div class="meta">4:00pm CT&nbsp;&nbsp;·&nbsp;&nbsp;ESPN+ (stream)</div>
+          
         </div>
       </div>
       <div class="row">
         <div class="tv-badge">TV 6</div>
         <div class="game-info">
-          <div class="game">Cleveland Guardians at Seattle Mariners</div>
-          <div class="meta">6:20pm&nbsp;&nbsp;·&nbsp;&nbsp;Peacock</div>
-          <div class="note">MLB Opening Day Sunday Night Game</div>
+          <div class="game">Sacramento Kings at Brooklyn Nets or Orlando Magic at Toronto Raptors (NBA Regular Season)</div>
+          <div class="meta">5:00pm CT&nbsp;&nbsp;·&nbsp;&nbsp;League Pass</div>
+          
         </div>
       </div>
-      </div><div class="switching">&#x21B3; Switching instructions:<br>- TV 3: UConn-Duke should end around 6:30-7:00pm CT. Once it ends, switch to Knicks-Thunder on NBC (5) if TV 2 needs to move, or hold for Warriors-Nuggets pregame. At 9:00pm CT, switch TV 3 to Golden State Warriors at Denver Nuggets on NBC/Peacock (5).<br>- TV 2: Knicks-Thunder on NBC at 6:30pm. When Warriors-Nuggets starts at 9:00pm on NBC, move Knicks-Thunder to TV 2 if still going (it may be in 4th quarter) or let it finish, then switch TV 2 to Warriors-Nuggets overflow or Stars game if still in progress.<br>- TV 1: Stars game should end around 8:30-9:00pm CT. Once it ends, switch to Golden State Warriors at Denver Nuggets on NBC/Peacock (5) or keep for post-game.<br>- TV 4: Blackhawks-Devils should end around 8:30-9:00pm. Switch to Warriors-Nuggets or any remaining NBA game.<br>- TV 5: Rockets-Pelicans ends around 8:30pm. Switch to Warriors-Nuggets on NBC/Peacock (5).<br>- TV 6: Guardians-Mariners ends around 9:30-10:00pm. Switch to Warriors-Nuggets for the second half.</div>
+      </div><div class="switching">&#x21B3; MUST SHOW. Local team, non-negotiable. Keep on through completion (~8:30pm).<br>AFTER GAME ENDS (~8:30pm): Switch to Golden State Warriors at Denver Nuggets | 9:00pm CT | NBC/Peacock (Ch 5)<br>Big market matchup, national broadcast. OKC has strong regional interest in Texas.<br>AFTER GAME ENDS (~9:00pm): Switch to Golden State Warriors at Denver Nuggets | NBC/Peacock (Ch 5) — second TV on this game or keep for post-game.<br>Secondary hockey option. Lower priority but good variety.<br>AFTER GAME ENDS (~8:30pm): Switch to Warriors at Nuggets on NBC/Peacock (Ch 5) or keep on NHL Network for highlights.<br>Texas team, regional interest. Good for Houston transplants.<br>AFTER GAME ENDS (~8:30pm): Switch to Warriors at Nuggets | 9:00pm CT | NBC/Peacock (Ch 5)<br>This started at 4:00pm — if still on, keep through finish. If over by 6pm, switch to:<br>Boston Celtics at Charlotte Hornets | 5:00pm CT | League Pass or<br>Cleveland Guardians at Seattle Mariners | 6:20pm CT | Peacock<br>LATE NIGHT: Switch to Warriors at Nuggets by 9:00pm CT.<br>Low priority background NBA. Fill as needed.<br>AT 9:00pm CT: Switch to Golden State Warriors at Denver Nuggets | NBC/Peacock (Ch 5) — this becomes the late night anchor game for the bar.</div>
     </details>
   </div>
   <div class="block">
@@ -370,51 +405,19 @@
         <div class="tv-badge">TV 1</div>
         <div class="game-info">
           <div class="game">Golden State Warriors at Denver Nuggets</div>
-          <div class="meta">9:00pm&nbsp;&nbsp;·&nbsp;&nbsp;NBC/Peacock (5)</div>
-          <div class="note">NBA Regular Season - Main Screen</div>
+          <div class="meta">9:00pm CT&nbsp;&nbsp;·&nbsp;&nbsp;NBC/Peacock (Ch 5) — MAIN TV, volume up</div>
+          
         </div>
       </div>
       <div class="row">
         <div class="tv-badge">TV 2</div>
         <div class="game-info">
-          <div class="game">Golden State Warriors at Denver Nuggets (duplicate OK, only major game left) or any remaining Stars/NHL wrap-up</div>
+          <div class="game">Warriors-Nuggets alternate angle or keep on for any overtime/late finish from earlier games</div>
           <div class="meta">&nbsp;&nbsp;·&nbsp;&nbsp;</div>
           
         </div>
       </div>
-      <div class="row">
-        <div class="tv-badge">TV 3</div>
-        <div class="game-info">
-          <div class="game">Warriors-Nuggets alternate camera or highlights/scores</div>
-          <div class="meta">&nbsp;&nbsp;·&nbsp;&nbsp;</div>
-          
-        </div>
-      </div>
-      <div class="row">
-        <div class="tv-badge">TV 4</div>
-        <div class="game-info">
-          <div class="game">Switch to highlights, SportsCenter, or NBA TV (216) for scores</div>
-          <div class="meta">&nbsp;&nbsp;·&nbsp;&nbsp;</div>
-          
-        </div>
-      </div>
-      <div class="row">
-        <div class="tv-badge">TV 5</div>
-        <div class="game-info">
-          <div class="game">Warriors-Nuggets or wind down</div>
-          <div class="meta">&nbsp;&nbsp;·&nbsp;&nbsp;</div>
-          
-        </div>
-      </div>
-      <div class="row">
-        <div class="tv-badge">TV 6</div>
-        <div class="game-info">
-          <div class="game">Warriors-Nuggets or wind down</div>
-          <div class="meta">&nbsp;&nbsp;·&nbsp;&nbsp;</div>
-          
-        </div>
-      </div>
-      </div><div class="switching">&#x21B3; Notes: Warriors-Nuggets is the only major live game from 9:00pm CT onward. Put it on at least 2-3 screens. This is a marquee NBA matchup and will carry the bar through closing.<br>KEY REMINDERS FOR STAFF:<br>- CBS stays on the big screen from 1:15pm through at least 7:00pm for both March Madness Elite Eight games. These are the biggest sporting events of the day. Do not change the channel during these games for any reason.<br>- Dallas Stars game at 6:00pm is must-show. Make sure at least one prominent TV has it.<br>- Texas Rangers Opening Day game at 12:35pm is must-show for the local crowd.<br>- Knicks at OKC Thunder is a good regional draw since OKC is close to Dallas. Put it on a visible screen.<br>- Lots of channel switching around 6:00pm CT -- have the remote ready.</div>
+      </div><div class="switching">&#x21B3; TV 3-6 | Consolidate to Warriors-Nuggets on 1-2 screens. Remaining TVs can show ESPN/NHL Network/NBA TV highlight shows or turn to general sports programming. Wind down as crowd thins.<br>KEY REMINDERS FOR STAFF:<br>- March Madness Elite Eight on CBS is the PRIORITY from 1:15pm through roughly 6:00pm. Volume up, do not change TV 1.<br>- Dallas Stars at 6:00pm is the local must-show for primetime. Get it on a main screen with volume as soon as CBS hoops wraps.<br>- Texas Rangers opening weekend game at 12:35pm should be visible all early afternoon.<br>- The big transition is around 6:00pm CT when March Madness ends and NHL/NBA primetime begins. Have remotes ready.<br>- Warriors-Nuggets at 9:00pm CT on NBC is your late-night anchor.</div>
     </details>
   </div>
 
