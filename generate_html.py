@@ -11,13 +11,13 @@ PLAYOFF_KEYWORDS = ("PLAYOFF", "TOURNAMENT", "FINALS", "MARCH MADNESS",
                     "WORLD SERIES", "SUPER BOWL", "CHAMPIONSHIP")
 DALLAS_KEYWORDS  = ("texas rangers", "dallas cowboys", "dallas mavericks", "dallas stars")
 
-def is_playoff_game(game_name: str) -> bool:
-    upper = game_name.upper()
-    return any(kw in upper for kw in PLAYOFF_KEYWORDS)
+def is_playoff_game(assignment: dict) -> bool:
+    text = (assignment.get("game", "") + " " + assignment.get("note", "")).upper()
+    return any(kw in text for kw in PLAYOFF_KEYWORDS)
 
-def is_dallas_game(game_name: str) -> bool:
-    lower = game_name.lower()
-    return any(kw in lower for kw in DALLAS_KEYWORDS)
+def is_dallas_game(assignment: dict) -> bool:
+    text = (assignment.get("game", "") + " " + assignment.get("note", "")).lower()
+    return any(kw in text for kw in DALLAS_KEYWORDS)
 
 def parse_schedule(schedule_text: str) -> list:
     """Parse plain-text schedule into a list of time block dicts."""
@@ -84,8 +84,8 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
             network = escape(a["network"])
             note = escape(a["note"])
 
-            playoff = is_playoff_game(a["game"])
-            local   = is_dallas_game(a["game"])
+            playoff = is_playoff_game(a)
+            local   = is_dallas_game(a)
 
             row_classes = "row"
             if local:
