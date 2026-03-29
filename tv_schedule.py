@@ -49,7 +49,7 @@ def build_schedule(games: str) -> tuple:
 
     message = client.messages.create(
         model="claude-opus-4-6",
-        max_tokens=2000,
+        max_tokens=4096,
         messages=[{"role": "user", "content": f"""Today is {today}. Here are all sports games on TV today (times are UTC):
 
 {games}
