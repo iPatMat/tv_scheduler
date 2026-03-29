@@ -93,17 +93,13 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
             elif playoff:
                 row_classes += " priority"
 
-            playoff_badge = (
-                '<span class="playoff-badge">Playoff / Tournament</span>'
-                if playoff else ""
-            )
             note_html = f'<div class="note">{note}</div>' if note else ""
 
             rows_html += f"""
       <div class="{row_classes}">
         <div class="tv-badge">TV {a['tv']}</div>
         <div class="game-info">
-          <div class="game">{game}{playoff_badge}</div>
+          <div class="game">{game}</div>
           <div class="meta">{time}&nbsp;&nbsp;·&nbsp;&nbsp;{network}</div>
           {note_html}
         </div>
@@ -253,7 +249,7 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
       padding: 0.65rem 1rem;
       border-top: 1px solid #ebebf0;
       align-items: start;
-      border-left: 3px solid transparent;
+      border-left: 5px solid transparent;
     }}
     .row:hover {{
       background: #f5f8ff;
@@ -294,22 +290,6 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
       font-size: 0.78rem;
       margin-top: 3px;
       font-style: italic;
-    }}
-
-    .playoff-badge {{
-      display: inline-block;
-      background: #f4a261;
-      color: #111;
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 2px 7px;
-      border-radius: 4px;
-      margin-left: 7px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      vertical-align: middle;
-      position: relative;
-      top: -1px;
     }}
 
     .switching {{
