@@ -7,6 +7,18 @@ from html import escape
 SECTION_RE = re.compile(r'^([A-Z]+(?:\s+[A-Z]+)*)\s*\(([^)]+)\)\s*$')
 TV_LINE_RE = re.compile(r'^TV\s*(\d+)\s*\|(.+)$', re.IGNORECASE)
 
+PLAYOFF_KEYWORDS = ("PLAYOFF", "TOURNAMENT", "FINALS", "MARCH MADNESS",
+                    "WORLD SERIES", "SUPER BOWL", "CHAMPIONSHIP")
+DALLAS_KEYWORDS  = ("cowboys", "mavericks", "mavs", "stars", "rangers", "dallas")
+
+def is_playoff_game(game_name: str) -> bool:
+    upper = game_name.upper()
+    return any(kw in upper for kw in PLAYOFF_KEYWORDS)
+
+def is_dallas_game(game_name: str) -> bool:
+    lower = game_name.lower()
+    return any(kw in lower for kw in DALLAS_KEYWORDS)
+
 def parse_schedule(schedule_text: str) -> list:
     """Parse plain-text schedule into a list of time block dicts."""
     blocks = []
@@ -44,7 +56,6 @@ def parse_schedule(schedule_text: str) -> list:
                 "note": parts[3] if len(parts) > 3 else "",
             })
         else:
-            # Anything else in a block is treated as a switching note
             current_block["switching_notes"].append(line)
 
     if current_block:
@@ -73,20 +84,23 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
             network = escape(a["network"])
             note = escape(a["note"])
 
-            is_playoff = any(
-                kw in a["game"].upper()
-                for kw in ("PLAYOFF", "TOURNAMENT", "FINALS", "MARCH MADNESS",
-                           "WORLD SERIES", "SUPER BOWL", "CHAMPIONSHIP")
-            )
+            playoff = is_playoff_game(a["game"])
+            local   = is_dallas_game(a["game"])
+
+            row_classes = "row"
+            if local:
+                row_classes += " local"
+            elif playoff:
+                row_classes += " priority"
+
             playoff_badge = (
                 '<span class="playoff-badge">Playoff / Tournament</span>'
-                if is_playoff else ""
+                if playoff else ""
             )
-
             note_html = f'<div class="note">{note}</div>' if note else ""
 
             rows_html += f"""
-      <div class="row">
+      <div class="{row_classes}">
         <div class="tv-badge">TV {a['tv']}</div>
         <div class="game-info">
           <div class="game">{game}{playoff_badge}</div>
@@ -124,16 +138,17 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
 
     body {{
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0f0f0f;
+      background: #0a0f1e;
       color: #e0e0e0;
       min-height: 100vh;
+      border-top: 3px solid #378ADD;
     }}
 
     header {{
-      background: #1a1a2e;
+      background: #0a0f1e;
       padding: 1.5rem 1rem 1.25rem;
       text-align: center;
-      border-bottom: 3px solid #e94560;
+      border-bottom: 1px solid rgba(55, 138, 221, 0.2);
     }}
     header h1 {{
       font-size: 1.6rem;
@@ -143,32 +158,54 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
       font-weight: 800;
     }}
     header .date {{
-      color: #9090a8;
+      color: #8ba3c7;
       margin-top: 0.3rem;
       font-size: 0.9rem;
       letter-spacing: 1px;
     }}
 
     .summary {{
-      background: #1e1e2e;
-      border-left: 4px solid #e94560;
+      background: #111827;
+      border-left: 4px solid #378ADD;
       border-radius: 0 8px 8px 0;
       padding: 1rem 1.25rem;
       margin: 1rem;
       font-size: 0.95rem;
       line-height: 1.65;
-      color: #c0c0d0;
+      color: #e8eef8;
     }}
+
+    .legend {{
+      display: flex;
+      gap: 1.25rem;
+      padding: 0 1rem 0.25rem;
+      margin-bottom: 0.25rem;
+    }}
+    .legend-item {{
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      color: #8ba3c7;
+    }}
+    .dot {{
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }}
+    .priority-dot {{ background: #378ADD; }}
+    .local-dot    {{ background: #1D9E75; }}
 
     .block {{
       margin: 0.75rem 1rem;
     }}
 
     details {{
-      background: #1e1e2e;
+      background: #ffffff;
       border-radius: 10px;
       overflow: hidden;
-      border: 1px solid #2a2a40;
+      border: 1px solid rgba(255,255,255,0.08);
     }}
 
     summary {{
@@ -178,7 +215,7 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
       font-size: 0.95rem;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      color: #e94560;
+      color: #378ADD;
       list-style: none;
       display: flex;
       align-items: center;
@@ -190,7 +227,7 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
       content: "\\25BE";
       font-size: 1.1rem;
       transition: transform 0.2s ease;
-      color: #555;
+      color: #378ADD;
     }}
     details[open] summary::after {{
       transform: rotate(-180deg);
@@ -199,7 +236,7 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
     .time-range {{
       font-weight: 400;
       font-size: 0.78rem;
-      color: #666;
+      color: #6b8ab0;
       letter-spacing: 0.5px;
       margin-left: 0.5rem;
       text-transform: none;
@@ -214,16 +251,23 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
       grid-template-columns: 52px 1fr;
       gap: 0.75rem;
       padding: 0.65rem 1rem;
-      border-top: 1px solid #252538;
+      border-top: 1px solid #ebebf0;
       align-items: start;
+      border-left: 3px solid transparent;
     }}
     .row:hover {{
-      background: #23233a;
+      background: #f5f8ff;
+    }}
+    .row.priority {{
+      border-left-color: #378ADD;
+    }}
+    .row.local {{
+      border-left-color: #1D9E75;
     }}
 
     .tv-badge {{
-      background: #e94560;
-      color: #fff;
+      background: #E6F1FB;
+      color: #0C447C;
       font-weight: 700;
       font-size: 0.75rem;
       padding: 0.2rem 0.4rem;
@@ -237,16 +281,16 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
     .game-info .game {{
       font-weight: 600;
       font-size: 0.95rem;
-      color: #e8e8f0;
+      color: #0f1923;
       line-height: 1.3;
     }}
     .game-info .meta {{
-      color: #666;
+      color: #6b7280;
       font-size: 0.8rem;
       margin-top: 3px;
     }}
     .game-info .note {{
-      color: #888;
+      color: #9ca3af;
       font-size: 0.78rem;
       margin-top: 3px;
       font-style: italic;
@@ -270,23 +314,23 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
 
     .switching {{
       padding: 0.6rem 1rem;
-      color: #666;
+      color: #6b7280;
       font-size: 0.82rem;
       font-style: italic;
-      border-top: 1px solid #252538;
-      background: #191926;
+      border-top: 1px solid #ebebf0;
+      background: #f8faff;
     }}
 
     footer {{
       text-align: center;
       padding: 2.5rem 1rem 2rem;
-      color: #444;
+      color: #8ba3c7;
       font-size: 0.78rem;
     }}
 
     @media (min-width: 640px) {{
       header h1 {{ font-size: 2rem; }}
-      .summary, .block {{ max-width: 700px; margin-left: auto; margin-right: auto; }}
+      .summary, .legend, .block {{ max-width: 700px; margin-left: auto; margin-right: auto; }}
     }}
   </style>
 </head>
@@ -298,6 +342,11 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
 </header>
 
 <div class="summary">{summary}</div>
+
+<div class="legend">
+  <div class="legend-item"><span class="dot priority-dot"></span>Playoff / Tournament</div>
+  <div class="legend-item"><span class="dot local-dot"></span>Dallas / Local Team</div>
+</div>
 
 {blocks_html}
 
