@@ -1,0 +1,17 @@
+# Local environment secrets — never commit this
+.env
+
+# Generated outputs — recreated on each run
+schedule.json
+index.html
+public/
+
+# PDF temp files
+*.pdf
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/

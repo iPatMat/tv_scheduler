@@ -1,4 +1,6 @@
 import anthropic
+import json
+import re
 import requests
 from datetime import date, datetime
 import smtplib
@@ -64,69 +66,96 @@ Guidelines:
   If it is June, NBA Finals outrank everything except NFL.
   If there are only a few tournament/playoff games on, dedicate TVs to them before filling with regular season games.
 - Always flag when a game is a tournament or playoff game vs regular season.
-- This bar is located in Dallas, Texas. Always prioritize local Dallas teams 
-  when they are playing: Dallas Cowboys (NFL), Dallas Mavericks (NBA), 
-  Dallas Stars (NHL), and Texas Rangers (MLB). Treat any Dallas team game 
+- This bar is located in Dallas, Texas. Always prioritize local Dallas teams
+  when they are playing: Dallas Cowboys (NFL), Dallas Mavericks (NBA),
+  Dallas Stars (NHL), and Texas Rangers (MLB). Treat any Dallas team game
   as must-show on at least one TV regardless of opponent.
 - After Dallas teams, favor big-market teams, rivalries, and playoff/meaningful games
-- Also note Texas college teams (Texas, Texas A&M, TCU, Baylor, Texas Tech) have strong 
+- Also note Texas college teams (Texas, Texas A&M, TCU, Baylor, Texas Tech) have strong
   local interest and should be prioritized over out-of-market college games when equal
 - Avoid showing same sport on multiple TVs simultaneously when possible
 - Primetime window (5pm-11pm CT) is most important
-- When a game ends, suggest what to switch to
-- For each game, include the DirecTV channel number in parentheses after 
+- When a game ends, suggest what to switch to in switching_notes
+- For each game, include the DirecTV channel number in parentheses after
   the network name. This bar uses DirecTV in Dallas, Texas.
-  Common mappings: CBS = 4, NBC = 5, ABC = 7, ESPN = 206, ESPN2 = 209, 
-  FS1 = 219, FS2 = 618, TNT = 245, TBS = 247, truTV = 246, 
-  NHL Network = 215, NBA TV = 216, MLB Network = 213, 
+  Common mappings: CBS = 4, NBC = 5, ABC = 7, ESPN = 206, ESPN2 = 209,
+  FS1 = 219, FS2 = 618, TNT = 245, TBS = 247, truTV = 246,
+  NHL Network = 215, NBA TV = 216, MLB Network = 213,
   NFL Network = 212, CBS Sports Network = 221
 
-Format your response EXACTLY like this with both sections clearly labeled:
+Return ONLY valid JSON with no markdown, no code fences, no extra text. Use exactly this structure:
 
-SUMMARY:
-Write 3-5 plain English sentences summarizing the day. What are the big games, what should staff prioritize, any key switching times to know about. Write this for a bar manager reading a quick morning email.
+{{
+  "summary": "3-5 plain English sentences for a bar manager. What are the big games, what should staff prioritize, any key switching times.",
+  "time_blocks": [
+    {{
+      "label": "MORNING",
+      "time_range": "11am - 3pm CT",
+      "assignments": [
+        {{
+          "tv": 1,
+          "game": "Team A vs Team B",
+          "time": "12:05pm CT",
+          "network": "ESPN (206)",
+          "league": "MLB",
+          "is_playoff": false
+        }}
+      ],
+      "switching_notes": "Optional note about what to switch to when a game ends"
+    }}
+  ]
+}}
 
-SCHEDULE:
-Write the full day schedule here as simple clean text for bar staff to print and follow.
-Use plain text only - no markdown, no asterisks, no hashtags, no table formatting.
-
-Structure the schedule like this example:
-
-MORNING (11am - 3pm)
-TV 1 | Cubs vs Cardinals | 12:05pm | MLB.TV
-TV 2 | Lakers vs Warriors | 1:00pm | ESPN
-TV 3 | ...
-TV 4 | ...
-
-AFTERNOON (3pm - 6pm)
-TV 1 | ...
-
-PRIMETIME (6pm - close)
-TV 1 | ...
-
-Include switching instructions under each time block where relevant.
+Include all three time blocks in order: MORNING (11am-3pm CT), AFTERNOON (3pm-6pm CT), PRIMETIME (6pm-close CT).
+Omit a time block entirely if there are no games in that window.
 """}]
     )
 
-    full_response = message.content[0].text
+    full_response = message.content[0].text.strip()
 
-    # Split into summary and schedule
-    summary = ""
-    schedule = ""
+    try:
+        data = json.loads(full_response)
+    except json.JSONDecodeError:
+        # Try to extract JSON if there's stray text around it
+        match = re.search(r'\{.*\}', full_response, re.DOTALL)
+        if match:
+            data = json.loads(match.group())
+        else:
+            print("Warning: Claude did not return valid JSON. Using fallback.")
+            data = {"summary": full_response[:500], "time_blocks": []}
 
-    if "SUMMARY:" in full_response and "SCHEDULE:" in full_response:
-        parts = full_response.split("SCHEDULE:")
-        summary = parts[0].replace("SUMMARY:", "").strip()
-        schedule = parts[1].strip()
-    else:
-        # Fallback if Claude doesn't follow the format
-        summary = full_response[:500]
-        schedule = full_response
+    summary = data.get("summary", "")
+    return summary, data
 
-    return summary, schedule
+def save_schedule_json(data: dict, filename: str):
+    today = date.today().strftime("%A, %B %d, %Y")
+    output = {"date": today, **data}
+    with open(filename, "w") as f:
+        json.dump(output, f, indent=2)
+    print(f"Saved schedule to {filename}")
 
-def create_pdf(schedule: str, filename: str):
+def schedule_data_to_text(data: dict) -> str:
+    """Reconstruct a plain-text schedule from structured JSON for PDF generation."""
+    lines = []
+    for block in data.get("time_blocks", []):
+        label = block.get("label", "")
+        time_range = block.get("time_range", "")
+        lines.append(f"{label} ({time_range})")
+        for a in block.get("assignments", []):
+            playoff_tag = " [PLAYOFF/TOURNAMENT]" if a.get("is_playoff") else ""
+            lines.append(
+                f"TV {a['tv']} | {a['game']} | {a['time']} | {a['network']}{playoff_tag}"
+            )
+        switching = block.get("switching_notes", "").strip()
+        if switching:
+            lines.append(f">> {switching}")
+        lines.append("")
+    return "\n".join(lines)
+
+def create_pdf(schedule_data: dict, filename: str):
     today_str = date.today().strftime("%A, %B %d, %Y")
+    schedule_text = schedule_data_to_text(schedule_data)
+
     doc = SimpleDocTemplate(
         filename,
         pagesize=letter,
@@ -179,7 +208,7 @@ def create_pdf(schedule: str, filename: str):
     story.append(Paragraph("TV Schedule", title_style))
     story.append(Paragraph(today_str, date_style))
 
-    for line in schedule.split("\n"):
+    for line in schedule_text.split("\n"):
         line = line.strip()
         if not line:
             story.append(Spacer(1, 6))
@@ -190,7 +219,7 @@ def create_pdf(schedule: str, filename: str):
 
     doc.build(story)
 
-def send_email(summary: str, pdf_path: str):
+def send_email(summary: str, pdf_path: str, pages_url: str = ""):
     today_str = date.today().strftime("%A, %B %d")
 
     msg = MIMEMultipart()
@@ -199,11 +228,13 @@ def send_email(summary: str, pdf_path: str):
     recipients = os.environ["RECIPIENT_EMAIL"].split(",")
     msg["To"] = os.environ["RECIPIENT_EMAIL"]
 
-    # Email body is just the summary
-    body = MIMEText(f"Good morning!\n\n{summary}\n\nFull schedule attached.\n\n— Your Bar Scheduler Bot")
+    footer = "\n\nFull schedule attached as PDF."
+    if pages_url:
+        footer += f"\nView online: {pages_url}"
+
+    body = MIMEText(f"Good morning!\n\n{summary}{footer}\n\n— Your Bar Scheduler Bot")
     msg.attach(body)
 
-    # Attach the PDF
     with open(pdf_path, "rb") as f:
         attachment = MIMEBase("application", "octet-stream")
         attachment.set_payload(f.read())
@@ -225,12 +256,22 @@ if __name__ == "__main__":
     print(f"Found {len(games.splitlines())} games")
 
     print("Building schedule with Claude...")
-    summary, schedule = build_schedule(games)
+    summary, schedule_data = build_schedule(games)
+
+    print("Saving schedule JSON...")
+    save_schedule_json(schedule_data, "schedule.json")
 
     print("Creating PDF...")
     pdf_path = "/tmp/tv_schedule.pdf"
-    create_pdf(schedule, pdf_path)
+    create_pdf(schedule_data, pdf_path)
+
+    # Build GH Pages URL from the built-in GITHUB_REPOSITORY env var
+    github_repo = os.environ.get("GITHUB_REPOSITORY", "")
+    pages_url = ""
+    if github_repo and "/" in github_repo:
+        owner, repo = github_repo.split("/", 1)
+        pages_url = f"https://{owner}.github.io/{repo}/"
 
     print("Sending email...")
-    send_email(summary, pdf_path)
+    send_email(summary, pdf_path, pages_url)
     print("Done!")

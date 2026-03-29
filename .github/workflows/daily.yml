@@ -8,6 +8,9 @@ on:
 jobs:
   send-schedule:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write        # Required for peaceiris/actions-gh-pages to push
+
     steps:
       - uses: actions/checkout@v3
 
@@ -25,4 +28,17 @@ jobs:
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: python tv_schedule.py
+
+      - name: Generate HTML
+        run: |
+          mkdir -p public
+          python generate_html.py schedule.json public/index.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
