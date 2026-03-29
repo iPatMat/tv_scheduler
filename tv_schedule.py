@@ -85,10 +85,10 @@ Guidelines:
 Format your response EXACTLY like this with both sections clearly labeled:
 
 SUMMARY:
-Write 3-5 plain English sentences summarizing the day. What are the big games, what should staff prioritize, any key switching times to know about. Write this for a bar manager reading a quick morning email.
+Write 3-5 plain English sentences summarizing the day. What are the big games, what to prioritize, any key switching times to know about. Write in second person ("you", "be ready") — avoid references to "staff" or "manager".
 
 SCHEDULE:
-Write the full day schedule here as simple clean text for bar staff to print and follow.
+Write the full day schedule here as simple clean text to print and follow.
 Use plain text only - no markdown, no asterisks, no hashtags, no table formatting.
 
 Structure the schedule like this example:
