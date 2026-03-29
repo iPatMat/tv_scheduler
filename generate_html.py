@@ -9,7 +9,7 @@ TV_LINE_RE = re.compile(r'^TV\s*(\d+)\s*\|(.+)$', re.IGNORECASE)
 
 PLAYOFF_KEYWORDS = ("PLAYOFF", "TOURNAMENT", "FINALS", "MARCH MADNESS",
                     "WORLD SERIES", "SUPER BOWL", "CHAMPIONSHIP")
-DALLAS_KEYWORDS  = ("cowboys", "mavericks", "mavs", "stars", "rangers", "dallas")
+DALLAS_KEYWORDS  = ("texas rangers", "dallas cowboys", "dallas mavericks", "dallas stars")
 
 def is_playoff_game(game_name: str) -> bool:
     upper = game_name.upper()
