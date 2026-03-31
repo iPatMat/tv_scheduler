@@ -100,7 +100,7 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
         <div class="tv-badge">TV {a['tv']}</div>
         <div class="game-info">
           <div class="game">{game}</div>
-          <div class="meta">{time}&nbsp;&nbsp;·&nbsp;&nbsp;{network}</div>
+          <div class="meta"><span class="time">{time}</span>&nbsp;&nbsp;·&nbsp;&nbsp;{network}</div>
           {note_html}
         </div>
       </div>"""
@@ -284,6 +284,10 @@ def generate_html(schedule_path="schedule.json", output_path="index.html"):
       color: #6b7280;
       font-size: 0.8rem;
       margin-top: 3px;
+    }}
+    .game-info .time {{
+      font-weight: 700;
+      color: #0f1923;
     }}
     .game-info .note {{
       color: #9ca3af;
