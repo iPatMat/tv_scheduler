@@ -9,7 +9,7 @@ TV_LINE_RE = re.compile(r'^TV\s*(\d+)\s*\|(.+)$', re.IGNORECASE)
 
 PLAYOFF_KEYWORDS = ("PLAYOFF", "TOURNAMENT", "FINALS", "MARCH MADNESS",
                     "WORLD SERIES", "SUPER BOWL", "CHAMPIONSHIP")
-DALLAS_KEYWORDS  = ("texas rangers", "dallas cowboys", "dallas mavericks", "dallas stars","houston texans", "houston rockets", "houston astros", "san antonio spurs"))
+DALLAS_KEYWORDS  = ("texas rangers", "dallas cowboys", "dallas mavericks", "dallas stars","houston texans", "houston rockets", "houston astros", "san antonio spurs")
 
 def is_playoff_game(assignment: dict) -> bool:
     text = (assignment.get("game", "") + " " + assignment.get("note", "")).upper()
