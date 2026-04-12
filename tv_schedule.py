@@ -22,6 +22,7 @@ SPORTS = [
     ("basketball",  "mens-college-basketball"),
     ("football",   "college-football"),
     ("soccer", "fifa.world"),
+    ("football", "ufl")
 ]
 
 def fetch_todays_games():
