@@ -93,18 +93,39 @@ SCHEDULE:
 Write the full day schedule here as simple clean text to print and follow.
 Use plain text only - no markdown, no asterisks, no hashtags, no table formatting.
 
-Structure the schedule like this example:
+Structure the schedule into time blocks based on when games actually fall today — do not use fixed block names.
+Determine the blocks dynamically:
+- If games span 6 or more hours, use blocks of roughly 3 hours each.
+- If games span 3-6 hours, use blocks of roughly 2 hours each.
+- If games span fewer than 3 hours, use blocks of roughly 1 hour each.
+- Always use the last block's end time as "close" rather than a specific time.
+- Name blocks descriptively based on the time of day (e.g. EARLY AFTERNOON, AFTERNOON, EARLY EVENING, EVENING, PRIMETIME, LATE NIGHT).
+- Only create blocks that contain at least one game. Do not create empty blocks.
 
-MORNING (11am - 3pm)
-TV 1 | Cubs vs Cardinals | 12:05pm | MLB.TV
-TV 2 | Lakers vs Warriors | 1:00pm | ESPN
-TV 3 | ...
-TV 4 | ...
+Example for a day with games from 5pm-10pm CT (use 2-hour blocks):
 
-AFTERNOON (3pm - 6pm)
+EARLY EVENING (5pm - 7pm CT)
+TV 1 | Cubs vs Cardinals | 5:05pm CT | ESPN (206)
+TV 2 | Lakers vs Warriors | 5:30pm CT | TNT (245)
+
+EVENING (7pm - 9pm CT)
 TV 1 | ...
 
-PRIMETIME (6pm - close)
+LATE EVENING (9pm - close)
+TV 1 | ...
+
+Example for a day with games from noon-midnight CT (use 3-hour blocks):
+
+EARLY AFTERNOON (12pm - 3pm CT)
+TV 1 | ...
+
+AFTERNOON (3pm - 6pm CT)
+TV 1 | ...
+
+EVENING (6pm - 9pm CT)
+TV 1 | ...
+
+LATE NIGHT (9pm - close)
 TV 1 | ...
 
 Include switching instructions under each time block where relevant.
