@@ -75,6 +75,7 @@ Guidelines:
 - Next favor big-market teams, rivalries, and playoff/meaningful games
 - Also note Texas college teams (Texas, Texas A&M, TCU, Baylor, Texas Tech) have strong
   local interest and should be prioritized over out-of-market college games when equal
+- Give Indiana Fever medium priority 
 - Avoid showing same sport on multiple TVs simultaneously when possible
 - Primetime window (5pm-11pm CT) is most important
 - When a game ends, suggest what to switch to
