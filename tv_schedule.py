@@ -72,6 +72,7 @@ Guidelines:
   Dallas Stars (NHL), and Texas Rangers (MLB). Treat any Dallas team game
   as must-show on at least one TV regardless of opponent.
 - After Dallas teams, comes other Texas teams like the San Antonio Spurs, Houston Texans, etc.
+- Never assert a team’s home state or city unless certain. Do not group non-Texas teams as Texas teams.
 - Next favor big-market teams, rivalries, and playoff/meaningful games
 - Also note Texas college teams (Texas, Texas A&M, TCU, Baylor, Texas Tech) have strong
   local interest and should be prioritized over out-of-market college games when equal
